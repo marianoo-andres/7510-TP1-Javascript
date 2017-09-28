@@ -144,7 +144,7 @@ DatabaseBuilder.prototype.build_rules_map = function(rules) {
 DatabaseBuilder.prototype.build_database= function(db) {
         let facts_and_rules_stirng = this.get_facts_and_rules_string(db)
 
-        if (facts_and_rules_stirng.error) return facts_and_rules_stirng.error
+        if (facts_and_rules_stirng.error) return facts_and_rules_stirng
 
         let facts = facts_and_rules_stirng.facts_string.map(this.to_fact)
         let rules = facts_and_rules_stirng.rules_string.map(this.to_rule)

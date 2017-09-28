@@ -46,7 +46,7 @@ describe("databaseBuilder", function () {
                 "hija(X, Y) :- mujer(X), padre(Y, X)"
             ];
             let database_result = databaseBuilder.build_database(invalid_db)
-            assert(database_result.toString() === invalid_db.toString())
+            assert(database_result.error.toString() === invalid_db.toString())
         });
 
     });

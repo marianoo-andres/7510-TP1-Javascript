@@ -5,7 +5,7 @@ var assert = require('assert');
 var Interpreter = require('../src/interpreter');
 
 
-describe("Interpreter", function () {
+describe("Interpreter parent database", function () {
 
     var db = [
         "varon(juan).",
@@ -105,6 +105,76 @@ describe("Interpreter", function () {
 
         it('hija(maria, hector) should be true', function () {
             assert(interpreter.checkQuery('hija(maria, hector)'));
+        });
+    });
+
+
+});
+
+describe("Interpreter numbers database", function () {
+
+    var db_numbers = [
+        "add(zero, zero, zero).",
+        "add(zero, one, one).",
+        "add(zero, two, two).",
+        "add(one, zero, one).",
+        "add(one, one, two).",
+        "add(one, two, zero).",
+        "add(two, zero, two).",
+        "add(two, one, zero).",
+        "add(two, two, one).",
+        "subtract(X, Y, Z) :- add(Y, Z, X)."
+    ];
+
+    var interpreter = null;
+
+    before(function () {
+        // runs before all tests in this block
+    });
+
+    after(function () {
+        // runs after all tests in this block
+    });
+
+    beforeEach(function () {
+        // runs before each test in this block
+        interpreter = new Interpreter();
+        interpreter.parseDB(db_numbers);
+    });
+
+    afterEach(function () {
+        // runs after each test in this block
+    });
+
+
+    describe('Interpreter Facts', function () {
+
+        it('add(zero,zero,zero) should be true', function () {
+            assert(interpreter.checkQuery('add(zero, zero, zero)'));
+        });
+
+        it('add(zero, one, one) should be true', function () {
+            assert(interpreter.checkQuery('add(zero, one, one)'));
+        });
+
+        it('add(one, two, three) should be false', function () {
+            assert(!interpreter.checkQuery('add(one,two,three)'));
+        });
+
+        it('not_a_fact(one, two, three) should be false', function () {
+            assert(!interpreter.checkQuery('not_a_fact(one, two, three)'));
+        });
+
+    });
+
+    describe('Interpreter Rules', function () {
+
+        it('subtract(one, one, two) should be false', function () {
+            assert(!interpreter.checkQuery('subtract(one, one, two)') === true);
+        });
+
+        it('subtract(two, one, one) should be true', function () {
+            assert(interpreter.checkQuery('subtract(two, one, one)'));
         });
     });
 

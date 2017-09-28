@@ -4,7 +4,12 @@ var Interpreter = function () {
 
     this.parseDB = function (db) {
         let databaseBuilder = new DatabaseBuilder()
-        this.database = databaseBuilder.build_database(db)
+        let result = databaseBuilder.build_database(db)
+        if (result.error) {
+            this.database = null
+            return result.error
+        }
+        this.database = result
     }
 
     this.checkQuery = function (query_string) {
