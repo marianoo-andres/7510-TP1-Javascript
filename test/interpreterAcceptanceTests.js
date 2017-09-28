@@ -59,6 +59,14 @@ describe("Interpreter", function () {
             assert(interpreter.checkQuery('mujer(cecilia)'));
         });
 
+        it('mujer(jorge) should be false', function () {
+            assert(!interpreter.checkQuery('mujer(jorge)'));
+        });
+
+        it('mujer(josefina) should be false', function () {
+            assert(!interpreter.checkQuery('mujer(josefina)'));
+        });
+
         it('padre(juan, pepe) should be true', function () {
             assert(interpreter.checkQuery('padre(juan, pepe)') === true);
         });
@@ -67,7 +75,9 @@ describe("Interpreter", function () {
             assert(interpreter.checkQuery('padre(mario, pepe)') === false);
         });
 
-        // TODO: Add more tests
+        it('padre(marta, josefina) should be false', function () {
+            assert(!interpreter.checkQuery('padre(marta, josefina)'));
+        });
 
     });
 
@@ -76,15 +86,26 @@ describe("Interpreter", function () {
         it('hijo(pepe, juan) should be true', function () {
             assert(interpreter.checkQuery('hijo(pepe, juan)') === true);
         });
+
+        it('hijo(pepa, juan) should be false', function () {
+            assert(!interpreter.checkQuery('hijo(pepa, juan)'));
+        });
+
+        it('hijo(alejandro, juan) should be false', function () {
+            assert(!interpreter.checkQuery('hijo(alejandro, juan)'));
+        });
+
         it('hija(maria, roberto) should be false', function () {
             assert(interpreter.checkQuery('hija(maria, roberto)') === false);
         });
-        it('hijo(pepe, juan) should be true', function () {
-            assert(interpreter.checkQuery('hijo(pepe, juan)'));
+
+        it('hija(alejandro, roberto) should be false', function () {
+            assert(!interpreter.checkQuery('hija(alejandro, roberto)'));
         });
 
-        // TODO: Add more tests
-
+        it('hija(maria, hector) should be true', function () {
+            assert(interpreter.checkQuery('hija(maria, hector)'));
+        });
     });
 
 
