@@ -113,7 +113,7 @@ describe("Interpreter parent database", function () {
 
 describe("Interpreter numbers database", function () {
 
-    var db_numbers = [
+    var db = [
         "add(zero, zero, zero).",
         "add(zero, one, one).",
         "add(zero, two, two).",
@@ -139,7 +139,7 @@ describe("Interpreter numbers database", function () {
     beforeEach(function () {
         // runs before each test in this block
         interpreter = new Interpreter();
-        interpreter.parseDB(db_numbers);
+        interpreter.parseDB(db);
     });
 
     afterEach(function () {
