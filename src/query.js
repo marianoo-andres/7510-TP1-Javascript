@@ -57,15 +57,16 @@ Query.prototype.query_rule = function (rule_map, fact_map, rule) {
     false if not
  */
 Query.prototype.query_string_is_valid = function (query_string) {
+    query_string = query_string.replaceAll(" ","")
     regex = /^[a-zA-Z]+\([a-zA-Z]+(,[a-zA-Z]+)*\)$/
-    return !(regex.exec(query_string) ===null)
+    return !(regex.exec(query_string) === null)
 }
 
 /*
     Parse query_string into {query_name: name, query_parameters: [param1,param2..]}
  */
 Query.prototype.parse_query = function(query_string) {
-    if (!this.query_string_is_valid(query_string)) return null
+    if (!this.query_string_is_valid(query_string))  return null
 
     let query_string_splitted = query_string.replaceAll(" ","").replaceAll(")","").split("(")
     return {query_name: query_string_splitted[0], query_parameters: query_string_splitted[1].split(",")}
