@@ -1,9 +1,7 @@
 var expect = require("chai").expect;
-var should = require('should');
 var assert = require('assert');
 
 var Interpreter = require('../src/interpreter');
-
 
 describe("Interpreter parent database", function () {
 
@@ -26,26 +24,13 @@ describe("Interpreter parent database", function () {
 
     var interpreter = null;
 
-    before(function () {
-        // runs before all tests in this block
-    });
-
-    after(function () {
-        // runs after all tests in this block
-    });
-
     beforeEach(function () {
         // runs before each test in this block
         interpreter = new Interpreter();
         interpreter.parseDB(db);
     });
 
-    afterEach(function () {
-        // runs after each test in this block
-    });
-
-
-    describe('Interpreter Facts', function () {
+    describe('Interpreter Valid Facts', function () {
 
         it('varon(juan) should be true', function () {
             assert(interpreter.checkQuery('varon(juan)'));
@@ -81,6 +66,25 @@ describe("Interpreter parent database", function () {
 
     });
 
+    describe('Interpreter Invalid Facts', function () {
+
+        it('varonjuan should throw error', function () {
+            expect(function () {interpreter.checkQuery('varonjuan')}).to.throw();
+        });
+
+        it('varon(maria should throw error', function () {
+            expect(function () {interpreter.checkQuery('varon(maria')}).to.throw();
+        });
+
+        it('(cecilia) should throw error', function () {
+            expect(function () {interpreter.checkQuery('varon(maria')}).to.throw();
+        });
+
+        it('"" should be throw error', function () {
+            expect(function () {interpreter.checkQuery('')}).to.throw();
+        });
+    });
+
     describe('Interpreter Rules', function () {
 
         it('hijo(pepe, juan) should be true', function () {
@@ -108,7 +112,20 @@ describe("Interpreter parent database", function () {
         });
     });
 
+    describe('Interpreter Invalid Rules', function () {
 
+        it('hijo(pepe, ) should throw error', function () {
+            expect(function () {interpreter.checkQuery('hijo(pepe, )')}).to.throw();
+        });
+
+        it('hijo should throw error', function () {
+            expect(function () {interpreter.checkQuery('hijo')}).to.throw();
+        });
+
+        it('(alejandro, juan) should throw error', function () {
+            expect(function () {interpreter.checkQuery('(alejandro, juan)')}).to.throw();
+        });
+    });
 });
 
 describe("Interpreter numbers database", function () {
@@ -161,8 +178,8 @@ describe("Interpreter numbers database", function () {
             assert(!interpreter.checkQuery('add(one,two,three)'));
         });
 
-        it('not_a_fact(one, two, three) should be false', function () {
-            assert(!interpreter.checkQuery('not_a_fact(one, two, three)'));
+        it('NotAFact(one, two, three) should be false', function () {
+            assert(!interpreter.checkQuery('NotAFact(one, two, three)'));
         });
 
     });
@@ -179,6 +196,42 @@ describe("Interpreter numbers database", function () {
     });
 
 
+});
+
+describe("Interpreter parse invalid database", function () {
+
+    var invalid_db = [
+        "varonjuan).",
+        "varon(pepe.",
+        "varon(hector).",
+        "roberto.",
+        "",
+        "mujer(maria).",
+        "mujer(cecilia).",
+        "padre(juan, pepe).",
+        "padre(juan, pepa).",
+        "padre(hector, maria).",
+        "padre(roberto, alejandro).",
+        "padre(roberto, cecilia).",
+        "hijo(X Y) - varonX padre(Y, X).",
+        "hijaX, Y :- mujer(X), padre(Y, X)."
+    ];
+
+    var interpreter = null;
+
+    before(function () {
+        // runs before all tests in this block
+        interpreter = new Interpreter();
+    });
+
+    describe('Interpreter parse invalid db should return array of invalid strings that could not be parsed', function () {
+
+        it('should return ["varonjuan)." , "varon(pepe." ,  "roberto." , "", "hijo(X Y) - varonX padre(Y, X)." ,' +
+            ' "hijaX, Y :- mujer(X), padre(Y, X)."]', function () {
+            assert(interpreter.parseDB(invalid_db).toString() === ["varonjuan)." , "varon(pepe." , "roberto." , "",
+                "hijo(X Y) - varonX padre(Y, X).", "hijaX, Y :- mujer(X), padre(Y, X)."].toString())
+        });
+    });
 });
 
 

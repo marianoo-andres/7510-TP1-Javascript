@@ -14,7 +14,9 @@ var Interpreter = function () {
 
     this.checkQuery = function (query_string) {
         let query = new Query()
-        return query.get_query_result(this.database, query_string)
+        let result = query.get_query_result(this.database, query_string)
+        if (result === null) throw new Error("Error al parsear la query")
+        return result
     }
 
     this.database = null
